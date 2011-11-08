@@ -266,6 +266,12 @@ node pipeable_pretty.js --port 4646
 curl -sS registry.npmjs.org/event-stream | curl -sSNT- localhost:4646
 
 ```
+
+## Contributors
+
+ - Original author: Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)
+ - Jeff Barczewski @jeffbski (https://github.com/jeffbski)
+
 ## compatible modules:
 
   * https://github.com/felixge/node-growing-file  
