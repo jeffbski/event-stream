@@ -271,15 +271,43 @@ es.pipe = es.connect = function () {
   return thepipe
 }
 
-//
-// child -- pipe through a child process
-//
 
-es.child = function (child) {
+/**
+  Create a through stream from a child process which pipes stdin and stdout.
+  By default, it does not generate an error event if the child process
+  returns non-zero exit code.
 
-  return es.duplex(child.stdin, child.stdout)
+  By specifying an options object you may alter this behaviour:
 
-}
+  @param child process
+  @param [options={}] - optional options object
+  @param [options.includeStdErr=true]       # will include stderr in the forward output (merged with stdout)
+  @param [options.errorOnNonZeroExit=true]  # emit 'error' event if child process exits with non-zero exit code
+ */  
+es.child = function (child, options) {
+  options = options || {};
+  var stream = es.duplex(child.stdin, child.stdout);
+
+  // if includeStdErr then pipe stdErr also into stream
+  // otherwise emit error_data event with the stdErr info
+  var err_data_evt = (options.includeStdErr) ? 'data' : 'error_data'; 
+  child.stderr.on('data', function (err) {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(err_data_evt);
+    stream.emit.apply(stream, args);
+  });
+  if (options.errorOnNonZeroExit) {
+    child.on('exit', function(code, signal) {
+      if (code !== 0) {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift('error');
+        stream.emit.apply(stream, args);
+      }
+    });
+  }
+  return stream;
+};
+
 
 //
 // duplex -- pipe into one stream and out another

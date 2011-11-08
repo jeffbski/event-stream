@@ -219,15 +219,23 @@ It is assumed that the two streams are connected to each other in some way.
   es.duplex(grep.stdin, grep.stdout)
 ```
 
-## child (child_process)
+## child (child_process, options={})
 
-Create a through stream from a child process ...
+Create a through stream from a child process which pipes stdin and stdout.
+By default, it does not generate an error event if the child process
+returns non-zero exit code.
+
+
+By specifying an options object you may alter this behaviour:
+
+ - options.includeStdErr=true       # will include stderr in the forward output (merged with stdout)
+ - options.errorOnNonZeroExit=true  # emit 'error' event if child process exits with non-zero exit code
 
 ``` js
   var cp = require('child_process')
 
-  es.child(cp.exec('grep Stream')) // a through stream
-
+  es.child(cp.spawn('ls')) // a through stream
+  es.child(cp.spawn('ls', { includeStdErr: true, errorOnNonZeroExit: true }));
 ```
 
 ## pipeable (streamCreatorFunction,...)
