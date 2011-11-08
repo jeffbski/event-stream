@@ -129,6 +129,21 @@ all `data` events are stored in an array, which is passed to the callback when t
   reader.pipe(writer)
 ```
 
+## wait (callback)
+
+wait until all `data` events have been received and `end` event has been received
+then call callback. When the callback has been received 
+
+``` js
+  var es = require('event-stream')
+    , reader = es.readArray([1, 2, 3])
+    , writer = es.wait(function (){
+      //all data has been received now
+    })
+
+  reader.pipe(writer)
+``` 
+
 ## split ()
 
 Break up a stream and reassemble it so that each line is a chunk.  
