@@ -1,12 +1,12 @@
 'use strict';
 
-var t = require('assert');
-var EXIT = (require.main === module) ? 'exit' : 'beforeExit';
+var tap = require('tap');
+var test = tap.test;
 
 var es = require('../');
 
-exports['wait for stream events to finish then cb'] = function () {
-
+test('wait for stream events to finish then cb', function (t) {
+  t.plan(1);
   var reader = es.readArray([1, 2, 3]);
 
   var mapData = [];
@@ -15,36 +15,46 @@ exports['wait for stream events to finish then cb'] = function () {
     cb(null, data);
   }
 
-  var waitCbCalled = false;
-  function doneCallback(err) {
-    t.equal(err, undefined, 'error should be undefined');
-    t.equal(waitCbCalled, false, 'callback should only be called once');
-    t.deepEqual(mapData, [1, 2, 3], 'map should have seen all the events'); 
-    waitCbCalled = true;
+  function doneCallback() {
+    t.deepEqual(mapData, [1, 2, 3], 'map should have seen all the events');
   }
 
-  var errCalled = false;
   var stream = es.connect(
     reader,
     es.map(mapFunc),
     es.wait(doneCallback)
   ).on('error', function (err) {
-    errCalled = true;
+    t.fail('no error events should have been received');
+    t.end();
   });
-  
+});
 
-  process.on(EXIT, function () {
-    t.ok(!errCalled, 'no error events should have been received');
-    t.ok(waitCbCalled, 'callback from wait should have been called after events were received');
-    console.log('success');
+
+test('error in stream fires error event', function (t) {
+  t.plan(1);
+  var reader = es.readArray([1, 2, 3]);
+
+  var mapData = [];
+  function mapFunc(data, cb) {
+    mapData.push(data);
+    cb(100, data); //causing error with error value 100
+  }
+
+  function doneCallback(err) {
+    t.fail('should not be here since error fired');
+    t.end();
+  }
+
+  var stream = es.connect(
+    reader,
+    es.map(mapFunc),
+    es.wait(doneCallback)
+  ).on('error', function (err) {
+    t.equal(err, 100, 'should have received error from callback');
   });
-  
-};
+});
 
 
 
-
-// if run directly from node execute all the exports
-if (require.main === module) Object.keys(exports).forEach(function (f) { exports[f](); });
 
 

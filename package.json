@@ -1,18 +1,23 @@
-{ "name": "event-stream"
-, "version": "0.6.1"
-, "description": "construct pipes of streams of events"
-, "homepage": "http://github.com/jeffbski/event-stream"
-, "repository": 
-  { "type": "git"
-  , "url": "https://github.com/jeffbski/event-stream.git" }
-, "dependencies": {
+{ "name": "event-stream", 
+  "version": "0.6.1", 
+  "description": "construct pipes of streams of events", 
+  "author": "Jeff Barczewski <jeff.barczewski@gmail.com>",
+  "homepage": "http://github.com/jeffbski/event-stream", 
+  "repository": 
+    { "type": "git", 
+      "url": "https://github.com/jeffbski/event-stream.git" 
+    }, 
+  "dependencies": {
     "optimist": "0.2"
-  }
-, "devDependencies": {
+  }, 
+  "devDependencies": {
     "asynct": "1",
     "it-is":  "1",
-    "d-utils":"2.3"
-  }
-, "author": "Jeff Barczewski <jeff.barczewski@gmail.com>",
+    "d-utils":"2.3",
+    "tap": "~0.0.12"
+  },
+  "scripts": {
+    "test" : "tap ./test"
+  },
   "private": true
 }
