@@ -1,7 +1,10 @@
 { "name": "event-stream", 
   "version": "0.6.1", 
   "description": "construct pipes of streams of events", 
-  "author": "Jeff Barczewski <jeff.barczewski@gmail.com>",
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://bit.ly/dominictarr)",
+  "contributors": [
+    "Jeff Barczewski <jeff.barczewski@gmail.com> (https://github.com/jeffbski)"
+  ],     
   "homepage": "http://github.com/jeffbski/event-stream", 
   "repository": 
     { "type": "git", 
@@ -19,5 +22,8 @@
   "scripts": {
     "test" : "tap ./test"
   },
+  licenses: [
+    { "type": "MIT", "url": "http://github.com/isaacs/npm/raw/master/LICENSE" }
+  ], 
   "private": true
 }
