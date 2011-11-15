@@ -22,7 +22,7 @@
   "scripts": {
     "test" : "tap ./test"
   },
-  licenses: [
+  "licenses": [
     { "type": "MIT", "url": "http://github.com/isaacs/npm/raw/master/LICENSE" }
   ], 
   "private": true
